@@ -1,0 +1,20 @@
+{
+  "name": "aifoundry-server",
+  "version": "1.0.0",
+  "description": "AI Foundry Backend API",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "*",
+    "cors": "*",
+    "dotenv": "*",
+    "express": "*",
+    "nanoid": "*",
+    "openai": "*",
+    "uuid": "*"
+  }
+}
