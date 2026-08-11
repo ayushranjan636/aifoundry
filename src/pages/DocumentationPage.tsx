@@ -48,7 +48,7 @@ export function DocumentationPage() {
   }, []);
 
   const INFERENCE_CODE: Record<string, string> = {
-    curl: `curl -X POST "http://localhost:3001/api/v1/models/credit-risk-ai/predict" \\
+    curl: `curl -X POST "https://aifoundry-production.up.railway.app/api/v1/models/credit-risk-ai/predict" \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: ${apiKey}" \\
   -d '{
@@ -61,7 +61,7 @@ export function DocumentationPage() {
     python: `import requests
 
 response = requests.post(
-    "http://localhost:3001/api/v1/models/credit-risk-ai/predict",
+    "https://aifoundry-production.up.railway.app/api/v1/models/credit-risk-ai/predict",
     headers={
         "Content-Type": "application/json",
         "x-api-key": "${apiKey}"
@@ -80,7 +80,7 @@ print(f"Prediction: {result['prediction']}")
 print(f"Probability: {result['probability']:.2%}")
 print(f"Confidence: {result['confidence']}")`,
     javascript: `const response = await fetch(
-  "http://localhost:3001/api/v1/models/credit-risk-ai/predict",
+  "https://aifoundry-production.up.railway.app/api/v1/models/credit-risk-ai/predict",
   {
     method: "POST",
     headers: {
@@ -117,7 +117,7 @@ interface PredictionResponse {
 
 async function predict(input: Record<string, any>): Promise<PredictionResponse> {
   const res = await fetch(
-    "http://localhost:3001/api/v1/models/credit-risk-ai/predict",
+    "https://aifoundry-production.up.railway.app/api/v1/models/credit-risk-ai/predict",
     {
       method: "POST",
       headers: {
@@ -160,7 +160,7 @@ async function predict(input: Record<string, any>): Promise<PredictionResponse> 
         <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-2">
           <div className="text-[12px] font-semibold text-foreground">Base URL</div>
           <div className="font-mono text-[12px] text-primary bg-background rounded-lg border border-border px-3 py-2">
-            http://localhost:3001
+            https://aifoundry-production.up.railway.app
           </div>
           <p className="text-[11px] text-muted-foreground">In production, replace with your hosted endpoint.</p>
         </div>

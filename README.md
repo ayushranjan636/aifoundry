@@ -2,84 +2,84 @@
 
 > **Build AI for your problem. Not someone else's.**
 
-A production-quality AI Engineering Foundry — from data to production API without needing an ML team.
+A production AI Engineering Foundry — from data to production API without needing an ML team.
+
+**Live:** https://aifoundry-iitm.vercel.app  
+**API:** https://aifoundry-production.up.railway.app
 
 ---
 
-## Quick Start
+## Quick Start (Local)
 
 ```bash
 npm install
-npm run dev
+npm run dev              # Frontend → localhost:5173
+cd server && npm install && node index.js  # Backend → localhost:3001
 ```
-
-Open [http://localhost:5173](http://localhost:5173)
-
-**Demo login:** Click "Continue with Demo Account" on the login page.
 
 ---
 
-## Adding your OpenAI API Key
+## Production URLs
 
-The platform runs in demo mode without a key. To enable **real GPT-4o inference**:
+| Service | URL |
+|---|---|
+| Frontend | https://aifoundry-iitm.vercel.app |
+| Backend API | https://aifoundry-production.up.railway.app |
+| Inference | `POST /api/v1/models/:modelId` |
+| Health | `GET /api/health` |
+| Analytics | `GET /api/analytics/overview` |
 
-**Option 1 — Settings page (recommended):**
-1. Log in → Settings → paste your `sk-...` key → Test connection → Save
+---
 
-**Option 2 — Environment variable:**
+## Test the API
+
 ```bash
-cp .env.example .env
-# Edit .env and add VITE_OPENAI_API_KEY=sk-your-key
-npm run dev
-```
+# Health check
+curl https://aifoundry-production.up.railway.app/api/health
 
-**What the key enables:**
-- Architecture analysis via GPT-4o-mini
-- Model specification generation via GPT-4o (creates your "trained model" as a specialized system prompt)
-- Live inference in the Testing Lab — your model actually responds
-- AI-generated health interpretation
-- Real API Playground responses
+# Run inference
+curl -X POST https://aifoundry-production.up.railway.app/api/v1/models/credit-risk-ai \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: YOUR_API_KEY" \
+  -d '{"income": 75000, "loan_amount": 800000, "credit_score": 740, "employment": "salaried"}'
+
+# Get API key
+curl https://aifoundry-production.up.railway.app/api/apikey
+```
 
 ---
 
 ## Architecture
 
 ```
-src/
-├── config/         # API key management
-├── services/
-│   ├── openaiService.ts    # Real GPT-4o calls
-│   ├── aiFoundryService.ts # Main service (uses real or mock)
-│   └── mockData.ts         # Demo data + fallback functions
-├── pages/
-│   ├── LandingPage.tsx
-│   ├── auth/               # Login, Signup
-│   ├── console/            # Dashboard
-│   ├── projects/           # Project overview, health, testing, deploy, API, versions
-│   └── build/              # 6-step wizard: Define → Architecture → Model → Data → Checkpoint → Build
-├── components/
-│   ├── layout/             # AppLayout, WizardProgress, BuildWizardLayout
-│   └── ui/                 # Button, Card, Badge, Input, Progress, Tabs, Skeleton
-├── types/index.ts          # Full TypeScript types
-└── lib/utils.ts            # Helpers
+Frontend (Vercel)        → React + TypeScript + Vite + Tailwind
+Backend (Railway)        → Express + SQLite + OpenAI
+Database                 → SQLite (persistent volume on Railway)
+AI Engine                → OpenAI GPT-4o (runs in background)
 ```
 
-## How the "model" works
+## How the model works
 
-When you build an AI in Foundry:
-1. You describe your objective, inputs, outputs, and constraints
-2. You upload a dataset (analyzed for quality and readiness)  
-3. During the "build" phase, **GPT-4o generates a specialized system prompt** — this IS your "trained model"
-4. When you test: inputs are sent to GPT-4o-mini with your generated system prompt
-5. The model responds with structured JSON: prediction, probability, confidence, and factor explanations
+1. User describes their AI (objective, inputs, outputs, constraints)
+2. User uploads a dataset (analyzed for quality and readiness)
+3. During build: a specialized system prompt is generated — this IS the "trained model"
+4. When testing: inputs are sent to the AI engine with the generated prompt
+5. The model responds with structured JSON: prediction, probability, confidence, explanations
 
-This is a legitimate AI product approach used in production systems. The system prompt encodes your domain knowledge, constraints, and output format.
+---
 
 ## Tech Stack
 
 - React 18 + TypeScript + Vite
 - Tailwind CSS (light/dark mode)
 - React Router v6
-- OpenAI SDK (`openai`)
+- Express + SQLite (better-sqlite3)
+- OpenAI SDK
 - Recharts
 - Lucide icons
+
+---
+
+## Team
+
+Built by Ayush Ranjan, Shubansh Gupta, Gati, Sreenidhi, Arvin Subramaniam, Jaydev, and Sanjay Suman.

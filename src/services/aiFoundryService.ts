@@ -147,7 +147,7 @@ export const aiFoundryService = {
     try {
       const backendUp = await isBackendUp();
       if (backendUp) {
-        await fetch(`http://localhost:3001/api/projects/${id}`, { method: 'DELETE' }).catch(() => {});
+        await fetch(`https://aifoundry-production.up.railway.app/api/projects/${id}`, { method: 'DELETE' }).catch(() => {});
       }
     } catch {}
   },

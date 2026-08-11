@@ -2,7 +2,7 @@
 // In production: set VITE_API_URL to your Railway backend URL
 // Locally: defaults to http://localhost:3001
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://aifoundry-production.up.railway.app';
 let _backendAvailable: boolean | null = null;
 
 async function checkBackend(): Promise<boolean> {
