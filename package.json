@@ -1,8 +1,18 @@
 {
   "name": "ai-foundry",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "author": "Ayush Ranjan <ayushranjan636@gmail.com>",
+  "contributors": [
+    "Ayush Ranjan <ayushranjan636@gmail.com>",
+    "Shubansh Gupta",
+    "Gati",
+    "Sreenidhi",
+    "Arvin Subramaniam",
+    "Jaydev",
+    "Sanjay Suman"
+  ],
   "scripts": {
     "dev": "vite",
     "dev:server": "node server/index.js",
