@@ -29,6 +29,7 @@ app.use(cors({
     const allowed = [
       'http://localhost:5173',
       'http://127.0.0.1:5173',
+      'https://aifoundry-iitm.vercel.app',
     ];
     // Allow all Vercel deployments and custom domains
     if (origin.includes('vercel.app') || origin.includes('aifoundry') || allowed.includes(origin)) {
