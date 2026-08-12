@@ -121,3 +121,68 @@ export const apiKeysApi = {
 export const healthApi = {
   check: () => apiFetch<any>('/api/health'),
 };
+
+// ── Benchmarks ───────────────────────────────────────────
+export const benchmarksApi = {
+  list: (projectId: string, limit?: number) => {
+    const q = limit ? `?limit=${limit}` : '';
+    return apiFetch<any[]>(`/api/benchmarks/${projectId}${q}`);
+  },
+
+  latest: (projectId: string) =>
+    apiFetch<any>(`/api/benchmarks/${projectId}/latest`),
+
+  get: (id: string) =>
+    apiFetch<any>(`/api/benchmarks/report/${id}`),
+
+  run: (projectId: string, data: {
+    modelVersion: string;
+    taskType: string;
+    trainingRunId?: string;
+    trainingMetrics?: any;
+    dataQuality?: any;
+    dataSplit?: any;
+  }) =>
+    apiFetch<any>(`/api/benchmarks/${projectId}/run`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (id: string, updates: Record<string, any>) =>
+    apiFetch<any>(`/api/benchmarks/report/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updates),
+    }),
+
+  complete: (id: string, results: Record<string, any>) =>
+    apiFetch<any>(`/api/benchmarks/report/${id}/complete`, {
+      method: 'POST',
+      body: JSON.stringify(results),
+    }),
+
+  delete: (id: string) =>
+    apiFetch<any>(`/api/benchmarks/report/${id}`, { method: 'DELETE' }),
+
+  compare: (projectId: string, v1: string, v2: string) =>
+    apiFetch<any>(`/api/benchmarks/${projectId}/compare?v1=${v1}&v2=${v2}`),
+
+  // Golden Test Sets
+  getGoldenSet: (projectId: string) =>
+    apiFetch<any>(`/api/benchmarks/${projectId}/golden`),
+
+  saveGoldenSet: (projectId: string, data: any[], name?: string) =>
+    apiFetch<any>(`/api/benchmarks/${projectId}/golden`, {
+      method: 'POST',
+      body: JSON.stringify({ data, name }),
+    }),
+
+  // Recommendation Engine Benchmark
+  getRecommendationBenchmark: () =>
+    apiFetch<any>('/api/benchmarks/recommendation/latest'),
+
+  saveRecommendationBenchmark: (metrics: Record<string, any>) =>
+    apiFetch<any>('/api/benchmarks/recommendation', {
+      method: 'POST',
+      body: JSON.stringify(metrics),
+    }),
+};

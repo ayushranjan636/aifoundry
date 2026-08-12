@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowRight, FileText, Table2, ImageIcon, Mic, Video,
   AlignLeft, Tag, TrendingUp, List, Star, Braces, Layers,
-  Database, ChevronDown,
+  Database, Camera, Film, AudioLines, Sparkles, Send,
+  CheckCircle2, Loader2,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Textarea } from '../../components/ui/Input';
 import { aiFoundryService } from '../../services/aiFoundryService';
+import {
+  generateClarifyingQuestions,
+  parseRequirement,
+  cleanAndImprovePrompt,
+} from '../../services/recommendationEngine';
 import { cn } from '../../lib/utils';
-import type { InputFormat, OutputFormat } from '../../types';
+import type { InputFormat, OutputFormat, ClarifyingQuestion, TrainingDataType } from '../../types';
 
 const INPUT_FORMATS: { id: InputFormat; label: string; icon: React.ReactNode }[] = [
   { id: 'text', label: 'Text', icon: <AlignLeft size={15} /> },
@@ -31,12 +37,21 @@ const OUTPUT_FORMATS: { id: OutputFormat; label: string; description: string; ic
   { id: 'multiple', label: 'Multiple outputs', description: 'Combination of types', icon: <Layers size={15} /> },
 ];
 
+const TRAINING_DATA_TYPES: { id: TrainingDataType; label: string; description: string; icon: React.ReactNode }[] = [
+  { id: 'text', label: 'Text Data', description: 'Conversations, articles, logs', icon: <AlignLeft size={16} /> },
+  { id: 'photo', label: 'Photos / Images', description: 'Train on visual data', icon: <Camera size={16} /> },
+  { id: 'video', label: 'Video', description: 'Video content for training', icon: <Film size={16} /> },
+  { id: 'voice', label: 'Voice / Audio', description: 'Speech and audio patterns', icon: <AudioLines size={16} /> },
+  { id: 'documents', label: 'Documents', description: 'PDFs, docs, knowledge base', icon: <FileText size={16} /> },
+  { id: 'structured', label: 'Structured Data', description: 'Tables, CSV, databases', icon: <Table2 size={16} /> },
+];
+
 const DATASET_SIZE_OPTIONS = [
   { id: 'none', label: 'No data yet', sub: 'I\'ll collect data later', icon: '—' },
-  { id: 'tiny', label: '< 1,000 examples', sub: 'Very limited — may need augmentation', icon: '🔴' },
+  { id: 'tiny', label: '< 1,000 examples', sub: 'Very limited', icon: '🔴' },
   { id: 'small', label: '1K – 10K examples', sub: 'Sufficient for simple tasks', icon: '🟡' },
   { id: 'medium', label: '10K – 100K examples', sub: 'Good for most use cases', icon: '🟢' },
-  { id: 'large', label: '100K – 1M examples', sub: 'Excellent — enables fine-tuning', icon: '🟢' },
+  { id: 'large', label: '100K – 1M examples', sub: 'Excellent', icon: '🟢' },
   { id: 'xlarge', label: '1M+ examples', sub: 'Enterprise scale', icon: '🟢' },
 ];
 
@@ -44,12 +59,21 @@ export function DefinePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [objective, setObjective] = useState('');
+  const [cleanedObjective, setCleanedObjective] = useState('');
+  const [isCleaningPrompt, setIsCleaningPrompt] = useState(false);
+  const [showCleanedVersion, setShowCleanedVersion] = useState(false);
   const [selectedInputs, setSelectedInputs] = useState<InputFormat[]>([]);
   const [selectedOutputs, setSelectedOutputs] = useState<OutputFormat[]>([]);
+  const [trainingDataTypes, setTrainingDataTypes] = useState<TrainingDataType[]>([]);
   const [constraints, setConstraints] = useState('');
   const [datasetSize, setDatasetSize] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Clarifying questions state
+  const [questions, setQuestions] = useState<ClarifyingQuestion[]>([]);
+  const [showQuestions, setShowQuestions] = useState(false);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -59,6 +83,11 @@ export function DefinePage() {
       if (project.inputFormats?.length) setSelectedInputs(project.inputFormats);
       if (project.outputFormats?.length) setSelectedOutputs(project.outputFormats);
       if (project.constraints) setConstraints(project.constraints);
+      if (project.trainingDataTypes?.length) setTrainingDataTypes(project.trainingDataTypes);
+      if (project.clarifyingQuestions?.length) {
+        setQuestions(project.clarifyingQuestions);
+        setShowQuestions(true);
+      }
     }
   }, [id]);
 
@@ -73,6 +102,45 @@ export function DefinePage() {
     return errs;
   };
 
+  const handleCleanPrompt = useCallback(async () => {
+    if (!objective.trim() || objective.trim().length < 20) return;
+    setIsCleaningPrompt(true);
+    try {
+      const cleaned = await cleanAndImprovePrompt(objective);
+      if (cleaned !== objective) {
+        setCleanedObjective(cleaned);
+        setShowCleanedVersion(true);
+      }
+    } finally {
+      setIsCleaningPrompt(false);
+    }
+  }, [objective]);
+
+  const handleAcceptCleaned = () => {
+    setObjective(cleanedObjective);
+    setShowCleanedVersion(false);
+    setCleanedObjective('');
+  };
+
+  const handleAskQuestions = async () => {
+    if (!objective.trim()) return;
+    setLoadingQuestions(true);
+    try {
+      const profile = await parseRequirement(objective);
+      const qs = await generateClarifyingQuestions(objective, profile);
+      setQuestions(qs);
+      setShowQuestions(true);
+    } finally {
+      setLoadingQuestions(false);
+    }
+  };
+
+  const handleAnswerQuestion = (questionId: string, answer: string) => {
+    setQuestions((prev) =>
+      prev.map((q) => q.id === questionId ? { ...q, answer } : q)
+    );
+  };
+
   const handleAnalyze = async () => {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
@@ -83,7 +151,8 @@ export function DefinePage() {
         inputFormats: selectedInputs,
         outputFormats: selectedOutputs,
         constraints,
-        // Store dataset size as part of constraints context
+        trainingDataTypes,
+        clarifyingQuestions: questions,
         ...(datasetSize ? { constraints: [constraints, `Dataset size: ${datasetSize}`].filter(Boolean).join('. ') } : {}),
       });
       navigate(`/projects/${id}/architect`);
@@ -94,21 +163,144 @@ export function DefinePage() {
     <div className="p-6 max-w-2xl mx-auto space-y-7 animate-fade-in">
       <div>
         <h1 className="text-[24px] font-bold text-foreground">What do you want your AI to do?</h1>
-        <p className="text-[13px] text-muted-foreground mt-1.5">
-          Describe the problem in your own words. The more detail you give, the better Foundry can tailor the architecture and model selection.
+        <p className="text-[13px] text-muted-foreground mt-1.5 leading-relaxed">
+          Describe the problem in your own words. We'll analyze your requirement, ask clarifying questions if needed, and recommend the best architecture automatically.
         </p>
       </div>
 
-      {/* Objective */}
+      {/* Objective with AI polish */}
       <div className="space-y-2">
         <Textarea
           label="Describe your AI"
           rows={4}
           placeholder="Example: I want an AI that analyzes customer support tickets and automatically routes them to the right team based on urgency and topic — billing issues, technical problems, or general inquiries."
           value={objective}
-          onChange={(e) => { setObjective(e.target.value); if (errors.objective) setErrors((p) => ({ ...p, objective: '' })); }}
+          onChange={(e) => {
+            setObjective(e.target.value);
+            if (errors.objective) setErrors((p) => ({ ...p, objective: '' }));
+            setShowCleanedVersion(false);
+          }}
           error={errors.objective}
         />
+
+        {/* AI improve prompt button */}
+        {objective.trim().length >= 20 && !showCleanedVersion && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCleanPrompt}
+              disabled={isCleaningPrompt}
+              className="flex items-center gap-1.5 text-[12px] text-primary hover:text-primary/80 transition-colors disabled:opacity-50"
+            >
+              {isCleaningPrompt ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+              {isCleaningPrompt ? 'Improving...' : 'Improve with AI'}
+            </button>
+            <button
+              onClick={handleAskQuestions}
+              disabled={loadingQuestions}
+              className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+            >
+              {loadingQuestions ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
+              {loadingQuestions ? 'Analyzing...' : 'Get clarifying questions'}
+            </button>
+          </div>
+        )}
+
+        {/* Cleaned version suggestion */}
+        {showCleanedVersion && (
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-3 animate-fade-in">
+            <div className="flex items-center gap-2 text-[12px] font-semibold text-primary">
+              <Sparkles size={13} />
+              AI-improved version
+            </div>
+            <p className="text-[13px] text-foreground leading-relaxed">{cleanedObjective}</p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleAcceptCleaned}
+                className="px-3 py-1.5 text-[11px] font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+              >
+                Use this version
+              </button>
+              <button
+                onClick={() => setShowCleanedVersion(false)}
+                className="px-3 py-1.5 text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Keep original
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Clarifying Questions (Claude-like) */}
+      {showQuestions && questions.length > 0 && (
+        <div className="rounded-xl border border-border bg-card p-5 space-y-4 animate-fade-in">
+          <div className="flex items-center gap-2">
+            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center">
+              <Sparkles size={12} className="text-primary" />
+            </div>
+            <div className="text-[13px] font-semibold text-foreground">
+              A few questions to help us recommend better
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {questions.map((q) => (
+              <div key={q.id} className="space-y-2">
+                <div className="text-[12px] font-medium text-foreground">{q.question}</div>
+                {q.options && (
+                  <div className="flex flex-wrap gap-2">
+                    {q.options.map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => handleAnswerQuestion(q.id, opt)}
+                        className={cn(
+                          'px-3 py-1.5 rounded-lg text-[11px] font-medium border transition-all',
+                          q.answer === opt
+                            ? 'border-primary bg-primary/10 text-primary'
+                            : 'border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                        )}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {q.answer && (
+                  <div className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400">
+                    <CheckCircle2 size={10} />
+                    {q.answer}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Training Data Types */}
+      <div className="space-y-3">
+        <div>
+          <div className="text-[13px] font-semibold text-foreground">What kind of training data will you provide?</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Select all data types you plan to use for training</div>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {TRAINING_DATA_TYPES.map((dt) => (
+            <button
+              key={dt.id}
+              onClick={() => setTrainingDataTypes(toggle(trainingDataTypes, dt.id))}
+              className={cn(
+                'flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition-all duration-150',
+                trainingDataTypes.includes(dt.id)
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground'
+              )}
+            >
+              {dt.icon}
+              <span className="text-[11px] font-medium">{dt.label}</span>
+              <span className="text-[9px] text-muted-foreground leading-tight">{dt.description}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Input formats */}
@@ -166,7 +358,7 @@ export function DefinePage() {
         {errors.outputs && <p className="text-[11px] text-destructive">{errors.outputs}</p>}
       </div>
 
-      {/* Dataset size — helps architecture recommendation */}
+      {/* Dataset size */}
       <div className="space-y-3">
         <div>
           <div className="flex items-center gap-2">
@@ -174,7 +366,7 @@ export function DefinePage() {
             <div className="text-[13px] font-semibold text-foreground">How much data do you have?</div>
           </div>
           <div className="text-[11px] text-muted-foreground mt-0.5">
-            This directly influences which architecture and approach Foundry recommends.
+            This directly influences which architecture and approach we recommend.
           </div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">

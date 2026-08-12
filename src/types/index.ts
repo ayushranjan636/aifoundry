@@ -1,9 +1,59 @@
 export type ApproachType = 'prompting' | 'rag' | 'fine-tuning' | 'slm';
-export type ModelId = 'qwen' | 'llama' | 'mistral' | 'gemma' | 'deepseek' | 'gpt';
+
+export type { BenchmarkReport, BenchmarkAPIResponse, TaskType, TrainingMetrics, DataQualityReport, UserFacingBenchmark, CompositeScore, BaselineComparison, ReliabilityMetrics, CalibrationMetrics, RegressionTestResult, ModelCandidate, AlternativeModelBenchmark, DataSlice, UserPriorityProfile } from './benchmark';
+export type ModelId = 'qwen' | 'llama' | 'mistral' | 'gemma' | 'deepseek' | 'gpt' | 'gpt-4o' | 'claude' | 'gemini';
 export type ProjectStatus = 'draft' | 'training' | 'evaluating' | 'production' | 'failed';
 export type InputFormat = 'text' | 'documents' | 'tables' | 'images' | 'audio' | 'video' | 'multiple';
 export type OutputFormat = 'text' | 'classification' | 'score' | 'prediction' | 'recommendation' | 'json' | 'multiple';
 export type DeploymentStatus = 'idle' | 'deploying' | 'production' | 'stopped';
+export type DeliveryMode = 'api' | 'chat';
+export type TrainingDataType = 'text' | 'photo' | 'video' | 'voice' | 'documents' | 'structured';
+export type ModelVisibility = 'public' | 'private';
+
+export interface ClarifyingQuestion {
+  id: string;
+  question: string;
+  category: 'task_type' | 'data' | 'quality' | 'performance' | 'budget' | 'deployment' | 'behavior';
+  options?: string[];
+  answer?: string;
+}
+
+export interface RequirementProfile {
+  useCase: string;
+  taskType: string;
+  dataSize: string;
+  dataIsPrivate: boolean;
+  knowledgeChangesFrequently: boolean;
+  expectedQueriesPerDay: number | null;
+  latencyRequirement: 'low' | 'medium' | 'high' | null;
+  budget: 'low' | 'medium' | 'high' | 'unknown';
+  deploymentRequirement: 'cloud' | 'private' | 'on-premise' | 'edge' | null;
+  outputType: 'selective' | 'descriptive' | 'mixed';
+  complexityLevel: 'simple' | 'moderate' | 'complex';
+  needsCitations: boolean;
+  needsDeterminism: boolean;
+}
+
+export interface AIRecommendation {
+  architecture: {
+    modelSize: 'small' | 'medium' | 'large';
+    techniques: ApproachType[];
+  };
+  recommendedModels: Array<{
+    provider: string;
+    model: string;
+    modelId: ModelId;
+    score: number;
+    reason: string;
+  }>;
+  reasoning: string[];
+  confidence: number;
+  alternative: {
+    description: string;
+    when: string;
+  };
+  costEstimate: string;
+}
 
 export interface DatasetAnalysis {
   rows: number;
@@ -161,6 +211,12 @@ export interface Project {
   inputFormats: InputFormat[];
   outputFormats: OutputFormat[];
   constraints: string;
+  deliveryMode: DeliveryMode;
+  modelVisibility: ModelVisibility;
+  trainingDataTypes: TrainingDataType[];
+  requirementProfile: RequirementProfile | null;
+  clarifyingQuestions: ClarifyingQuestion[];
+  aiRecommendation: AIRecommendation | null;
   recommendedApproach: ApproachType | null;
   selectedApproach: ApproachType | null;
   recommendedModel: ModelId | null;
@@ -175,7 +231,6 @@ export interface Project {
   testCases: TestCase[];
   status: ProjectStatus;
   generatedSystemPrompt: string | null;
-  // Suggested test input fields — generated at build time based on domain
   suggestedTestFields: Array<{ key: string; label: string; placeholder: string; defaultValue: string }> | null;
   createdAt: string;
   updatedAt: string;

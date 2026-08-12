@@ -21,19 +21,19 @@ export function Button({
     <button
       disabled={disabled || loading}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+        'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none',
         {
-          'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-[0.98]': variant === 'primary',
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
-          'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground': variant === 'outline',
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90': variant === 'destructive',
+          'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md hover:shadow-primary/20 active:scale-[0.97]': variant === 'primary',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80 active:scale-[0.98]': variant === 'secondary',
+          'hover:bg-accent hover:text-accent-foreground active:scale-[0.98]': variant === 'ghost',
+          'border border-input bg-background hover:bg-accent hover:text-accent-foreground hover:border-primary/30 active:scale-[0.98]': variant === 'outline',
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90 active:scale-[0.97]': variant === 'destructive',
           'text-primary underline-offset-4 hover:underline p-0 h-auto': variant === 'link',
         },
         {
           'h-8 px-3 text-xs': size === 'sm',
           'h-9 px-4 text-sm': size === 'md',
-          'h-11 px-6 text-base': size === 'lg',
+          'h-11 px-6 text-[15px]': size === 'lg',
         },
         variant === 'link' && 'h-auto px-0',
         className

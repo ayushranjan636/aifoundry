@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Cpu, Activity, TrendingUp, ChevronRight, Zap,
-  FlaskConical, Code2, GitBranch, RefreshCw,
+  FlaskConical, Code2, GitBranch, RefreshCw, MessageCircle,
+  Globe, Lock,
 } from 'lucide-react';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -24,6 +25,8 @@ interface ModelRow {
   avgLatency: number;
   errorRate: string;
   updatedAt: string;
+  deliveryMode?: string;
+  modelVisibility?: string;
 }
 
 export function ModelsPage() {
@@ -53,6 +56,8 @@ export function ModelsPage() {
         avgLatency: p.modelHealth?.latencyMs || 0,
         errorRate: p.deployment ? p.deployment.errorRate.toString() : '0',
         updatedAt: p.updatedAt,
+        deliveryMode: p.deliveryMode,
+        modelVisibility: p.modelVisibility,
       })));
     } finally {
       setLoading(false);
@@ -120,7 +125,21 @@ export function ModelsPage() {
                     <Cpu size={14} />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[13px] font-semibold text-foreground truncate">{model.name}</div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[13px] font-semibold text-foreground truncate">{model.name}</span>
+                      {model.deliveryMode === 'chat' && (
+                        <span className="flex items-center gap-0.5 text-[10px] text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-1.5 py-0.5 rounded-full">
+                          <MessageCircle size={9} />
+                          Chat
+                        </span>
+                      )}
+                      {model.modelVisibility === 'public' && (
+                        <Globe size={11} className="text-emerald-500 shrink-0" />
+                      )}
+                      {model.modelVisibility === 'private' && (
+                        <Lock size={10} className="text-muted-foreground/60 shrink-0" />
+                      )}
+                    </div>
                     <div className="text-[11px] text-muted-foreground capitalize">{model.approach} · {model.model}</div>
                   </div>
                 </div>

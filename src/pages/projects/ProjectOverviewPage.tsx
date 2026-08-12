@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Activity, Cpu, Database, FlaskConical, Rocket, Code2,
   Layers, TrendingUp, ChevronRight, ArrowRight, Play, Zap,
-  Trash2, MoreHorizontal,
+  Trash2, MoreHorizontal, BarChart3,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
@@ -84,6 +84,15 @@ export function ProjectOverviewPage() {
       badge: project.modelHealth
         ? <Badge variant={project.modelHealth.score >= 85 ? 'success' : 'warning'}>{project.modelHealth.score}/100</Badge>
         : null,
+      disabled: !project.modelHealth,
+    },
+    {
+      icon: <BarChart3 size={16} />,
+      label: 'Benchmark & Evaluation',
+      description: project.modelHealth
+        ? 'Quality, cost, speed & reliability analysis'
+        : 'Available after model is built',
+      href: `/projects/${id}/benchmark`,
       disabled: !project.modelHealth,
     },
     {

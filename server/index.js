@@ -11,11 +11,14 @@ try {
 } catch {}
 
 import { getDb } from './db/database.js';
+import { initPricingSchema } from './db/pricing.js';
 import projectsRouter from './routes/projects.js';
 import apiKeysRouter from './routes/apikeys.js';
 import inferenceRouter from './routes/inference.js';
 import analyticsRouter from './routes/analytics.js';
 import deploymentsRouter from './routes/deployments.js';
+import benchmarksRouter from './routes/benchmarks.js';
+import pricingRouter from './routes/pricing.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -77,6 +80,10 @@ app.use('/api/v1/models', inferenceRouter);        // external API endpoint
 app.use('/api/analytics', analyticsRouter);
 app.use('/api/deployments', deploymentsRouter);
 app.use('/api/apikeys', apiKeysRouter);
+app.use('/api/benchmarks', benchmarksRouter);
+app.use('/api/pricing', pricingRouter);
+app.use('/api/cost', pricingRouter);
+app.use('/api/billing', pricingRouter);
 
 // ── API key info endpoint ─────────────────────────────────
 app.get('/api/apikey', (_req, res) => {
@@ -92,12 +99,19 @@ app.use((err, _req, res, _next) => {
 
 // ── Start ──────────────────────────────────────────────────
 app.listen(PORT, () => {
+  // Initialize pricing schema and seed data
+  initPricingSchema();
+
   console.log(`\n🚀 AI Foundry API Server running on http://localhost:${PORT}`);
   console.log(`📊 Database: ${getDb().name}`);
   console.log(`⚡ AI Engine: ${process.env.OPENAI_API_KEY ? '✅ configured' : '⚠️  not configured (demo mode)'}`);
+  console.log(`💰 Pricing Engine: ✅ initialized`);
   console.log(`\nEndpoints:`);
   console.log(`  GET  http://localhost:${PORT}/api/health`);
   console.log(`  GET  http://localhost:${PORT}/api/projects`);
   console.log(`  POST http://localhost:${PORT}/api/v1/models/:projectId  (inference)`);
-  console.log(`  GET  http://localhost:${PORT}/api/analytics/timeseries\n`);
+  console.log(`  GET  http://localhost:${PORT}/api/analytics/timeseries`);
+  console.log(`  POST http://localhost:${PORT}/api/pricing/estimate`);
+  console.log(`  GET  http://localhost:${PORT}/api/pricing/models`);
+  console.log(`  GET  http://localhost:${PORT}/api/pricing/admin/profitability\n`);
 });

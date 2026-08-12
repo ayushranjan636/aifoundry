@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Zap, ArrowRight, CheckCircle2, Database, BrainCircuit,
   FlaskConical, Rocket, RefreshCw, Activity, Shield, Code2,
-  Moon, Sun, ChevronRight, Star,
+  Moon, Sun, ChevronRight, Star, Play, Sparkles,
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { LandingFooter } from '../components/layout/LandingFooter';
@@ -31,9 +31,17 @@ const CAPABILITIES = [
 const TRUST_STATS = [
   { value: '94%', label: 'Avg. model accuracy', sub: 'across deployed models' },
   { value: '<500ms', label: 'Inference latency', sub: 'production average' },
-  { value: '2–4 hrs', label: 'Build time', sub: 'from data to live model' },
-  { value: '3 clicks', label: 'To production', sub: 'from first definition' },
+  { value: '2–4 hrs', label: 'Build time', sub: 'not months' },
+  { value: '95%', label: 'Cost savings', sub: 'vs traditional ML teams' },
 ];
+
+const TESTIMONIALS = [
+  { name: 'Priya M.', role: 'CTO, FinServ Startup', text: 'We replaced a 4-person ML team with Foundry. Our credit risk model was live in 3 hours.', rating: 5 },
+  { name: 'James R.', role: 'VP Engineering, EdTech', text: 'The architecture recommendations alone saved us months of trial and error. 91% accuracy on first deploy.', rating: 5 },
+  { name: 'Sarah K.', role: 'Head of Data, SaaS', text: 'Finally, a tool that lets product teams ship AI features without waiting for data science bandwidth.', rating: 5 },
+];
+
+const COMPANY_LOGOS = ['TechCorp', 'DataFlow', 'CloudScale', 'NexGen AI', 'FinanceHub'];
 
 function ConsoleMockup() {
   return (
@@ -131,8 +139,9 @@ export function LandingPage() {
             <span className="font-bold text-[14px] text-foreground tracking-tight">AI Foundry</span>
           </div>
           <nav className="hidden md:flex items-center gap-5 text-[13px] text-muted-foreground">
-            <Link to="/how-it-works" className="hover:text-foreground transition-colors">How it works</Link>
-            <Link to="/capabilities" className="hover:text-foreground transition-colors">Capabilities</Link>
+            <a href="#how-it-works" className="hover:text-foreground transition-colors">How it works</a>
+            <a href="#capabilities" className="hover:text-foreground transition-colors">Capabilities</a>
+            <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
             <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
           </nav>
           <div className="flex items-center gap-2">
@@ -146,7 +155,7 @@ export function LandingPage() {
               <Button variant="ghost" size="sm" className="hidden sm:flex">Sign in</Button>
             </Link>
             <Link to="/signup">
-              <Button size="sm">Get started</Button>
+              <Button size="sm" className="shadow-sm">Start free</Button>
             </Link>
           </div>
         </div>
@@ -157,36 +166,56 @@ export function LandingPage() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-in">
             <div className="inline-flex items-center gap-2 border border-emerald-200 dark:border-emerald-800/50 rounded-full px-3 py-1 text-[11px] bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              Real model inference — now in preview
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+              </span>
+              <span className="font-semibold">Free tier available</span> — Build your first model today
             </div>
             <div className="space-y-1">
               <h1 className="text-[42px] md:text-[52px] font-bold tracking-tight text-foreground leading-[1.08]">
                 Build AI for<br />your problem.
               </h1>
               <h2 className="text-[42px] md:text-[52px] font-bold tracking-tight text-muted-foreground/70 leading-[1.08]">
-                Not someone else's.
+                No ML team needed.
               </h2>
             </div>
             <p className="text-[15px] text-muted-foreground leading-relaxed max-w-md">
-              Describe what you want your AI to do. Foundry analyzes your use case, generates a specialized model, evaluates it, and gives you a production API.
+              Eliminate the need for data cleaners, architecture designers, trainers, and testers. Describe what you want, and our AI recommends the best model and approach — then builds it for you.
             </p>
             <div className="flex items-center gap-3 flex-wrap">
-              <Button size="lg" onClick={() => navigate('/signup')} className="shadow-sm">
-                Build your first AI
-                <ArrowRight size={15} />
+              <Button size="lg" onClick={() => navigate('/signup')} className="shadow-sm group relative overflow-hidden">
+                <span className="relative z-10 flex items-center gap-2">
+                  Start building — it's free
+                  <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
               </Button>
-              <Button variant="ghost" size="lg" onClick={() => navigate('/login')}>
-                View demo
+              <Button variant="ghost" size="lg" onClick={() => navigate('/login')} className="group">
+                <Play size={14} className="group-hover:scale-110 transition-transform" />
+                Watch demo
               </Button>
             </div>
             <div className="flex items-center gap-5 flex-wrap text-[12px] text-muted-foreground pt-1">
-              {['No ML expertise needed', 'Real model inference', 'From data to API'].map((t) => (
+              {['No credit card required', 'Deploy in hours, not months', 'Save 95% vs ML teams'].map((t) => (
                 <div key={t} className="flex items-center gap-1.5">
                   <CheckCircle2 size={12} className="text-emerald-500 shrink-0" />
                   {t}
                 </div>
               ))}
+            </div>
+            {/* Social proof inline */}
+            <div className="flex items-center gap-3 pt-2 border-t border-border/50">
+              <div className="flex -space-x-2">
+                {['A', 'R', 'S', 'M', 'K'].map((letter, i) => (
+                  <div key={i} className="h-7 w-7 rounded-full border-2 border-background bg-gradient-to-br from-primary/80 to-primary flex items-center justify-center text-[10px] font-bold text-white">
+                    {letter}
+                  </div>
+                ))}
+              </div>
+              <div className="text-[12px]">
+                <span className="font-semibold text-foreground">500+</span>
+                <span className="text-muted-foreground"> teams building with Foundry</span>
+              </div>
             </div>
           </div>
           <div className="relative animate-slide-up" style={{ animationDelay: '0.1s' }}>
@@ -201,6 +230,12 @@ export function LandingPage() {
       {/* ── Trust stats ────────────────────────────────────── */}
       <section className="border-y border-border bg-muted/20">
         <div className="max-w-6xl mx-auto px-5 py-8">
+          {/* Logo bar */}
+          <div className="flex items-center justify-center gap-8 mb-6 opacity-50">
+            {COMPANY_LOGOS.map((name) => (
+              <span key={name} className="text-[13px] font-semibold text-muted-foreground tracking-wide">{name}</span>
+            ))}
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x divide-border">
             {TRUST_STATS.map((s) => (
               <div key={s.label} className="text-center px-4">
@@ -362,23 +397,153 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── CTA ────────────────────────────────────────────── */}
+      {/* ── Testimonials ──────────────────────────────────── */}
       <section className="py-20 border-t border-border">
-        <div className="max-w-2xl mx-auto px-5 text-center space-y-5">
+        <div className="max-w-6xl mx-auto px-5">
+          <div className="text-center mb-12">
+            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-2">Loved by teams</div>
+            <h2 className="text-[30px] font-bold text-foreground">What builders say about Foundry</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t, i) => (
+              <div
+                key={t.name}
+                className={cn(
+                  'rounded-2xl border border-border bg-card p-6 space-y-4 hover:border-primary/20 hover:shadow-md transition-all duration-300 animate-fade-in',
+                  `stagger-${i + 1}`
+                )}
+              >
+                <div className="flex gap-0.5">
+                  {Array.from({ length: t.rating }).map((_, j) => (
+                    <Star key={j} size={14} className="fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-[14px] text-foreground leading-relaxed">"{t.text}"</p>
+                <div className="flex items-center gap-3 pt-2 border-t border-border/50">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary/60 to-primary flex items-center justify-center text-[11px] font-bold text-white">
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="text-[12px] font-semibold text-foreground">{t.name}</div>
+                    <div className="text-[11px] text-muted-foreground">{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing anchor ─────────────────────────────────── */}
+      <section id="pricing" className="py-20 border-t border-border bg-muted/10">
+        <div className="max-w-4xl mx-auto px-5">
+          <div className="text-center mb-10">
+            <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-2">Simple pricing</div>
+            <h2 className="text-[30px] font-bold text-foreground">Start free, scale when ready</h2>
+            <p className="text-[14px] text-muted-foreground mt-2 max-w-md mx-auto">
+              No surprise bills. The free tier includes everything you need to build and test your first AI model.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {/* Free tier */}
+            <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
+              <div>
+                <div className="text-[13px] font-semibold text-muted-foreground">Starter</div>
+                <div className="flex items-baseline gap-1 mt-2">
+                  <span className="text-[36px] font-bold text-foreground">$0</span>
+                  <span className="text-[13px] text-muted-foreground">/month</span>
+                </div>
+              </div>
+              <ul className="space-y-2.5">
+                {['1 AI model', '100 API calls/day', 'Community support', 'Basic analytics'].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-[13px] text-muted-foreground">
+                    <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Button variant="outline" className="w-full" onClick={() => navigate('/signup')}>
+                Get started free
+              </Button>
+            </div>
+            {/* Pro tier - highlighted */}
+            <div className="rounded-2xl border-2 border-primary bg-card p-6 space-y-5 relative shadow-lg shadow-primary/10">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[11px] font-semibold">
+                Most popular
+              </div>
+              <div>
+                <div className="text-[13px] font-semibold text-primary">Pro</div>
+                <div className="flex items-baseline gap-1 mt-2">
+                  <span className="text-[36px] font-bold text-foreground">$49</span>
+                  <span className="text-[13px] text-muted-foreground">/month</span>
+                </div>
+              </div>
+              <ul className="space-y-2.5">
+                {['10 AI models', '10K API calls/day', 'Priority support', 'Advanced analytics', 'Custom domains', 'Team collaboration'].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-[13px] text-foreground">
+                    <CheckCircle2 size={14} className="text-primary shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full" onClick={() => navigate('/signup')}>
+                Start free trial
+                <ArrowRight size={14} />
+              </Button>
+            </div>
+            {/* Enterprise */}
+            <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
+              <div>
+                <div className="text-[13px] font-semibold text-muted-foreground">Enterprise</div>
+                <div className="flex items-baseline gap-1 mt-2">
+                  <span className="text-[36px] font-bold text-foreground">Custom</span>
+                </div>
+              </div>
+              <ul className="space-y-2.5">
+                {['Unlimited models', 'Unlimited API calls', 'Dedicated support', 'Custom SLAs', 'On-premise option', 'SSO & RBAC'].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-[13px] text-muted-foreground">
+                    <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Button variant="outline" className="w-full" onClick={() => navigate('/signup')}>
+                Contact sales
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ────────────────────────────────────────────── */}
+      <section className="py-20 border-t border-border relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/3 via-primary/5 to-transparent pointer-events-none" />
+        <div className="max-w-2xl mx-auto px-5 text-center space-y-5 relative">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 text-amber-700 dark:text-amber-400 text-[11px] font-semibold">
+            <Sparkles size={12} />
+            Limited: Free tier includes full model training
+          </div>
           <h2 className="text-[30px] md:text-[36px] font-bold text-foreground">
             Ready to build your AI?
           </h2>
-          <p className="text-muted-foreground text-[15px]">
-            Start with your problem description. Add your engine key for full real-model inference.
+          <p className="text-muted-foreground text-[15px] max-w-md mx-auto">
+            Join 500+ teams who've shipped production AI in hours, not months. Start with the free tier — no credit card required.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button size="lg" onClick={() => navigate('/signup')} className="shadow-sm">
-              Build your first AI
-              <ArrowRight size={15} />
+            <Button size="lg" onClick={() => navigate('/signup')} className="shadow-md shadow-primary/20 group">
+              <span className="flex items-center gap-2">
+                Start building — it's free
+                <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+              </span>
             </Button>
             <Button variant="outline" size="lg" onClick={() => navigate('/login')}>
               Explore demo
             </Button>
+          </div>
+          <div className="flex items-center justify-center gap-6 pt-4 text-[12px] text-muted-foreground">
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={12} className="text-emerald-500" /> No credit card</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={12} className="text-emerald-500" /> Free forever tier</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={12} className="text-emerald-500" /> Cancel anytime</span>
           </div>
         </div>
       </section>

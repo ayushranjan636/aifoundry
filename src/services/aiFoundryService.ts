@@ -71,6 +71,12 @@ function createProject(data: Partial<Project>): Project {
     inputFormats: data.inputFormats || [],
     outputFormats: data.outputFormats || [],
     constraints: data.constraints || '',
+    deliveryMode: data.deliveryMode || 'api',
+    modelVisibility: data.modelVisibility || 'private',
+    trainingDataTypes: data.trainingDataTypes || [],
+    requirementProfile: data.requirementProfile || null,
+    clarifyingQuestions: data.clarifyingQuestions || [],
+    aiRecommendation: data.aiRecommendation || null,
     recommendedApproach: null,
     selectedApproach: null,
     recommendedModel: null,
@@ -193,20 +199,40 @@ export const aiFoundryService = {
   // ── Model selection ───────────────────────────────────────
   async getModelOptions(approach: ApproachType): Promise<ModelOption[]> {
     await new Promise((r) => setTimeout(r, 500));
-    const opts = [...MODEL_OPTIONS].map((o) => ({ ...o, recommended: false }));
-    if (approach === 'slm') {
-      opts.find((o) => o.id === 'gemma')!.fitScore = 93;
-      opts.find((o) => o.id === 'gemma')!.recommended = true;
-    } else if (approach === 'rag') {
-      opts.find((o) => o.id === 'llama')!.fitScore = 91;
-      opts.find((o) => o.id === 'llama')!.recommended = true;
-    } else if (approach === 'prompting') {
-      opts.find((o) => o.id === 'gpt')!.fitScore = 94;
-      opts.find((o) => o.id === 'gpt')!.recommended = true;
+
+    const LOCAL_MODEL_IDS: ModelId[] = ['llama', 'gemma', 'qwen', 'mistral', 'deepseek'];
+    const API_MODEL_IDS: ModelId[] = ['gpt-4o', 'claude', 'gemini', 'gpt'];
+
+    let opts: ModelOption[];
+
+    if (approach === 'rag' || approach === 'prompting') {
+      opts = [...MODEL_OPTIONS]
+        .filter((m) => API_MODEL_IDS.includes(m.id))
+        .map((o) => ({ ...o, recommended: false }));
+
+      if (approach === 'rag') {
+        const claude = opts.find((o) => o.id === 'claude');
+        if (claude) { claude.fitScore = 94; claude.recommended = true; }
+        const gpt4o = opts.find((o) => o.id === 'gpt-4o');
+        if (gpt4o) { gpt4o.fitScore = 93; }
+      } else {
+        const gpt4o = opts.find((o) => o.id === 'gpt-4o');
+        if (gpt4o) { gpt4o.fitScore = 95; gpt4o.recommended = true; }
+      }
     } else {
-      opts.find((o) => o.id === 'qwen')!.fitScore = 94;
-      opts.find((o) => o.id === 'qwen')!.recommended = true;
+      opts = [...MODEL_OPTIONS]
+        .filter((m) => LOCAL_MODEL_IDS.includes(m.id))
+        .map((o) => ({ ...o, recommended: false }));
+
+      if (approach === 'slm') {
+        const gemma = opts.find((o) => o.id === 'gemma');
+        if (gemma) { gemma.fitScore = 93; gemma.recommended = true; }
+      } else {
+        const qwen = opts.find((o) => o.id === 'qwen');
+        if (qwen) { qwen.fitScore = 94; qwen.recommended = true; }
+      }
     }
+
     return opts.sort((a, b) => b.fitScore - a.fitScore);
   },
 

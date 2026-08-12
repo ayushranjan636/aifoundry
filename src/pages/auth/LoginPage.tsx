@@ -88,7 +88,7 @@ export function LoginPage() {
         </div>
 
         <div className="text-xs text-muted-foreground">
-          © 2024 AI Foundry
+          © 2026 AI Foundry. All rights reserved.
         </div>
       </div>
 

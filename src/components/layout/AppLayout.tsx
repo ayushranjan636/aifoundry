@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, FolderOpen, Cpu, Rocket,
   BarChart3, Settings, ChevronDown, LogOut,
-  Moon, Sun, Menu, X, Zap, BookOpen,
+  Moon, Sun, Menu, X, Zap, BookOpen, DollarSign,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../store/AuthContext';
@@ -21,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
   { icon: <Cpu size={15} />, label: 'Models', href: '/console/models' },
   { icon: <Rocket size={15} />, label: 'Deployments', href: '/console/deployments' },
   { icon: <BarChart3 size={15} />, label: 'Usage', href: '/console/usage' },
+  { icon: <DollarSign size={15} />, label: 'Pricing', href: '/console/pricing' },
 ];
 
 export function AppLayout({ children }: { children: React.ReactNode }) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, Search, ChevronRight, Clock, Trash2 } from 'lucide-react';
+import { Plus, Search, ChevronRight, Clock, Trash2, MessageCircle, Globe, Lock, Code2 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { aiFoundryService } from '../../services/aiFoundryService';
@@ -97,6 +97,24 @@ export function ProjectsListPage() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm font-semibold text-foreground">{project.name}</span>
                   {statusBadge(project.status)}
+                  {project.deliveryMode === 'chat' && (
+                    <span className="flex items-center gap-0.5 text-[10px] text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-1.5 py-0.5 rounded-full">
+                      <MessageCircle size={9} />
+                      Chat
+                    </span>
+                  )}
+                  {project.deliveryMode === 'api' && (
+                    <span className="flex items-center gap-0.5 text-[10px] text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/30 px-1.5 py-0.5 rounded-full">
+                      <Code2 size={9} />
+                      API
+                    </span>
+                  )}
+                  {project.modelVisibility === 'public' && (
+                    <span className="flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-1.5 py-0.5 rounded-full">
+                      <Globe size={9} />
+                      Public
+                    </span>
+                  )}
                   {project.selectedApproach && (
                     <Badge variant="outline" className="capitalize">{project.selectedApproach}</Badge>
                   )}

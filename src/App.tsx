@@ -18,6 +18,7 @@ import { ConsolePage } from './pages/console/ConsolePage';
 import { ModelsPage } from './pages/console/ModelsPage';
 import { DeploymentsPage } from './pages/console/DeploymentsPage';
 import { UsagePage } from './pages/console/UsagePage';
+import { PricingPage } from './pages/console/PricingPage';
 import { ProjectsListPage } from './pages/projects/ProjectsListPage';
 import { NewProjectPage } from './pages/projects/NewProjectPage';
 import { ProjectOverviewPage } from './pages/projects/ProjectOverviewPage';
@@ -27,6 +28,7 @@ import { DeploymentPage } from './pages/projects/DeploymentPage';
 import { ApiPlaygroundPage } from './pages/projects/ApiPlaygroundPage';
 import { ModelVersionsPage } from './pages/projects/ModelVersionsPage';
 import { ImprovePage } from './pages/projects/ImprovePage';
+import { BenchmarkPage } from './pages/projects/BenchmarkPage';
 import { DefinePage } from './pages/build/DefinePage';
 import { ArchitectPage } from './pages/build/ArchitectPage';
 import { DatasetPage } from './pages/build/DatasetPage';
@@ -90,6 +92,7 @@ function AppRoutes() {
         <Route path="/console/models" element={<ModelsPage />} />
         <Route path="/console/deployments" element={<DeploymentsPage />} />
         <Route path="/console/usage" element={<UsagePage />} />
+        <Route path="/console/pricing" element={<PricingPage />} />
 
         <Route path="/projects" element={<ProjectsListPage />} />
         <Route path="/projects/new" element={<NewProjectPage />} />
@@ -105,6 +108,7 @@ function AppRoutes() {
         </Route>
 
         <Route path="/projects/:id/health" element={<ModelHealthPage />} />
+        <Route path="/projects/:id/benchmark" element={<BenchmarkPage />} />
         <Route path="/projects/:id/test" element={<TestingLabPage />} />
         <Route path="/projects/:id/deploy" element={<DeploymentPage />} />
         <Route path="/projects/:id/api" element={<ApiPlaygroundPage />} />
