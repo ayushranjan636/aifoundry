@@ -2,6 +2,7 @@ import type {
   TaskType,
   TrainingMetrics,
   FitDiagnosis,
+  DataSplit,
   DataSplitConfig,
   ClassificationMetrics,
   BinaryClassificationMetrics,
@@ -109,10 +110,10 @@ export function validateDataSplit(
   testCount: number,
   goldenCount?: number
 ): DataSplitConfig {
-  const splits = [
-    { type: 'training' as const, count: trainCount, percentage: (trainCount / totalRecords) * 100 },
-    { type: 'validation' as const, count: valCount, percentage: (valCount / totalRecords) * 100 },
-    { type: 'test' as const, count: testCount, percentage: (testCount / totalRecords) * 100 },
+  const splits: DataSplit[] = [
+    { type: 'training', count: trainCount, percentage: (trainCount / totalRecords) * 100 },
+    { type: 'validation', count: valCount, percentage: (valCount / totalRecords) * 100 },
+    { type: 'test', count: testCount, percentage: (testCount / totalRecords) * 100 },
   ];
 
   if (goldenCount) {

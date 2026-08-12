@@ -205,7 +205,7 @@ export function CheckpointPage() {
         <Button
           size="lg"
           onClick={handleStartBuild}
-          disabled={!canBuild || (isExpensive && !confirmed)}
+          disabled={!canBuild || !!(isExpensive && !confirmed)}
           loading={building}
           className={cn(canBuild && (isExpensive && !confirmed ? '' : 'bg-emerald-600 hover:bg-emerald-700'))}
         >
