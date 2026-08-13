@@ -160,7 +160,7 @@ export const DEMO_PROJECTS: Project[] = [
     ],
     deployment: {
       status: 'production',
-      endpoint: 'https://api.aifoundry.ai/v1/models/credit-risk/predict',
+      endpoint: 'https://api.deeployment.ai/v1/models/credit-risk/predict',
       latencyMs: 142,
       requestsToday: 2841,
       errorRate: 0.8,

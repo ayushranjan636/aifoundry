@@ -71,7 +71,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-sm">
             <Zap size={13} className="text-white" strokeWidth={2.5} />
           </div>
-          <span className="font-semibold text-[13px] text-foreground tracking-tight">AI Foundry</span>
+          <span className="font-semibold text-[13px] text-foreground tracking-tight">Deeployment.AI</span>
           <button
             className="ml-auto md:hidden text-muted-foreground hover:text-foreground p-1"
             onClick={() => setSidebarOpen(false)}
@@ -195,7 +195,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary">
               <Zap size={11} className="text-white" />
             </div>
-            <span className="font-semibold text-[13px]">AI Foundry</span>
+            <span className="font-semibold text-[13px]">Deeployment.AI</span>
           </div>
           <button onClick={toggleDark} className="ml-auto text-muted-foreground hover:text-foreground">
             {dark ? <Sun size={16} /> : <Moon size={16} />}

@@ -51,7 +51,7 @@ function ConsoleMockup() {
         <span className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" />
         <div className="flex-1 mx-3 h-4 rounded bg-background border border-border flex items-center px-2">
-          <span className="text-[9px] text-muted-foreground">app.aifoundry.ai/console</span>
+          <span className="text-[9px] text-muted-foreground">app.deeployment.ai/console</span>
         </div>
       </div>
       <div className="flex h-56">
@@ -61,7 +61,7 @@ function ConsoleMockup() {
             <div className="h-5 w-5 rounded-md bg-primary flex items-center justify-center">
               <Zap size={9} className="text-white" />
             </div>
-            <span className="text-[9px] font-bold text-foreground">AI Foundry</span>
+            <span className="text-[9px] font-bold text-foreground">Deeployment.AI</span>
           </div>
           {['Overview', 'Projects', 'Models', 'Deployments'].map((item, i) => (
             <div key={item} className={cn(
@@ -136,7 +136,7 @@ export function LandingPage() {
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-sm">
               <Zap size={13} className="text-white" strokeWidth={2.5} />
             </div>
-            <span className="font-bold text-[14px] text-foreground tracking-tight">AI Foundry</span>
+            <span className="font-bold text-[14px] text-foreground tracking-tight">Deeployment.AI</span>
           </div>
           <nav className="hidden md:flex items-center gap-5 text-[13px] text-muted-foreground">
             <a href="#how-it-works" className="hover:text-foreground transition-colors">How it works</a>
@@ -330,7 +330,7 @@ export function LandingPage() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary shadow-md shadow-primary/30 mx-auto mb-3">
                     <Zap size={22} className="text-white" strokeWidth={2.5} />
                   </div>
-                  <div className="text-[18px] font-bold text-foreground">AI Foundry</div>
+                  <div className="text-[18px] font-bold text-foreground">Deeployment.AI</div>
                   <div className="text-[11px] text-muted-foreground mt-1">Architecture · Training · Evaluation</div>
                 </div>
               </div>

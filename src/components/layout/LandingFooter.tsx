@@ -35,7 +35,7 @@ export function LandingFooter() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
                 <Zap size={14} className="text-white" strokeWidth={2.5} />
               </div>
-              <span className="font-bold text-[15px] text-foreground">AI Foundry</span>
+              <span className="font-bold text-[15px] text-foreground">Deeployment.AI</span>
             </div>
             <p className="text-[13px] text-muted-foreground leading-relaxed max-w-xs">
               Build AI for your problem. Not someone else's. From proprietary data to production AI — without an ML team.
@@ -80,7 +80,7 @@ export function LandingFooter() {
 
         {/* Bottom bar */}
         <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12px] text-muted-foreground">
-          <span>© 2024 AI Foundry. All rights reserved.</span>
+          <span>© 2026 Deeployment.AI. All rights reserved.</span>
           <div className="flex items-center gap-4">
             <a href="#" className="hover:text-foreground transition-colors">Terms</a>
             <a href="#" className="hover:text-foreground transition-colors">Privacy</a>

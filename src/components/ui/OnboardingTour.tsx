@@ -8,7 +8,7 @@ const TOUR_STEPS = [
   {
     id: 'welcome',
     icon: <Zap size={28} className="text-primary" />,
-    title: 'Welcome to AI Foundry',
+    title: 'Welcome to Deeployment.AI',
     body: 'Build AI for your specific problem — not someone else\'s. This quick tour shows you how to get from idea to a live API in minutes.',
     highlight: null,
     cta: 'Start tour',
@@ -47,7 +47,7 @@ const TOUR_STEPS = [
   },
 ];
 
-const TOUR_KEY = 'aifoundry_tour_done';
+const TOUR_KEY = 'deeployment_tour_done';
 
 export function useOnboardingTour() {
   const [show, setShow] = useState(false);

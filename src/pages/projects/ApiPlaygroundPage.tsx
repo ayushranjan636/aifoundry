@@ -51,7 +51,7 @@ export function ApiPlaygroundPage() {
   const [codeTab, setCodeTab] = useState('curl');
 
   const project = id ? aiFoundryService.getProject(id) : null;
-  const endpoint = project?.deployment?.endpoint || `https://api.aifoundry.ai/v1/models/${id}/predict`;
+  const endpoint = project?.deployment?.endpoint || `https://api.deeployment.ai/v1/models/${id}/predict`;
   const usingRealModel = hasOpenAIKey() && !!project?.generatedSystemPrompt;
 
   const handleRun = async () => {

@@ -54,7 +54,7 @@ export function SignupPage() {
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
             <Zap size={14} className="text-primary-foreground" />
           </div>
-          <span className="font-semibold text-sm">AI Foundry</span>
+          <span className="font-semibold text-sm">Deeployment.AI</span>
         </Link>
 
         <div className="space-y-8">
@@ -116,7 +116,7 @@ export function SignupPage() {
         </div>
 
         <div className="text-xs text-muted-foreground">
-          © 2026 AI Foundry. All rights reserved.
+          © 2026 Deeployment.AI. All rights reserved.
         </div>
       </div>
 
@@ -128,7 +128,7 @@ export function SignupPage() {
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
                 <Zap size={14} className="text-primary-foreground" />
               </div>
-              <span className="font-semibold text-sm">AI Foundry</span>
+              <span className="font-semibold text-sm">Deeployment.AI</span>
             </Link>
           </div>
 

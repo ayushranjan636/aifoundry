@@ -53,7 +53,7 @@ export function ThinkingAnimation({ steps, title = 'Analyzing…', className }: 
           <div className="text-[14px] font-semibold text-foreground">
             {activeStep ? `${activeStep}${currentDots}` : title}
           </div>
-          <div className="text-[11px] text-muted-foreground mt-0.5">AI Foundry is processing your request</div>
+          <div className="text-[11px] text-muted-foreground mt-0.5">Deeployment.AI is processing your request</div>
         </div>
       </div>
 

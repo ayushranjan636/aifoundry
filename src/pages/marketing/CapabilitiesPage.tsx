@@ -119,7 +119,7 @@ export function CapabilitiesPage() {
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-sm">
               <Zap size={13} className="text-white" strokeWidth={2.5} />
             </div>
-            <span className="font-bold text-[14px] text-foreground tracking-tight">AI Foundry</span>
+            <span className="font-bold text-[14px] text-foreground tracking-tight">Deeployment.AI</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link to="/how-it-works" className="text-[13px] text-muted-foreground hover:text-foreground transition-colors hidden sm:block">How it works</Link>

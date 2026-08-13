@@ -339,38 +339,34 @@ export function ConsolePage() {
         </div>
       </div>
 
-      {/* ── Upgrade prompt (freemium conversion) ──────────── */}
-      <div className="rounded-xl border border-primary/20 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 p-5 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full pointer-events-none" />
+      {/* ── Plan status ─────────────────────────────────── */}
+      <div className="rounded-xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/5 via-transparent to-emerald-500/5 p-5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-500/10 to-transparent rounded-bl-full pointer-events-none" />
         <div className="relative flex items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="text-[12px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">Free tier</span>
-              <span className="text-[11px] text-muted-foreground">1 of 1 model used</span>
+              <span className="text-[12px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">Premium</span>
+              <span className="text-[11px] text-muted-foreground">Unlimited models & API calls</span>
             </div>
-            <div className="text-[14px] font-semibold text-foreground">Unlock 10 models & 10K daily API calls</div>
+            <div className="text-[14px] font-semibold text-foreground">You have full access</div>
             <div className="text-[12px] text-muted-foreground">
-              Upgrade to Pro for team collaboration, advanced analytics, and priority support.
+              Team collaboration, advanced analytics, and priority support are all enabled.
             </div>
           </div>
-          <Button size="sm" onClick={() => navigate('/settings')} className="shrink-0 shadow-sm">
-            Upgrade to Pro
-            <ArrowRight size={13} />
-          </Button>
+          <div className="shrink-0 h-9 w-9 rounded-full bg-emerald-500/10 flex items-center justify-center">
+            <CheckCircle2 size={18} className="text-emerald-500" />
+          </div>
         </div>
         {/* Usage bar */}
         <div className="mt-4 space-y-2">
           <div className="flex items-center justify-between text-[11px]">
             <span className="text-muted-foreground">API calls today</span>
-            <span className="font-medium text-foreground">{formatNumber(totalRequests)} / 100</span>
+            <span className="font-medium text-foreground">{formatNumber(totalRequests)} / Unlimited</span>
           </div>
           <div className="h-1.5 rounded-full bg-muted overflow-hidden">
             <div
-              className={cn(
-                'h-full rounded-full transition-all duration-500',
-                totalRequests > 80 ? 'bg-amber-500' : 'bg-primary'
-              )}
-              style={{ width: `${Math.min((totalRequests / 100) * 100, 100)}%` }}
+              className="h-full rounded-full transition-all duration-500 bg-emerald-500"
+              style={{ width: `${Math.min((totalRequests / 1000) * 100, 100)}%` }}
             />
           </div>
         </div>

@@ -278,7 +278,7 @@ export function DeploymentPage() {
       {!currentDeployment && (
         <div className="space-y-3">
           {[
-            { id: 'hosted', icon: <Globe size={18} />, label: 'Hosted by AI Foundry', desc: 'We manage infrastructure, scaling, and monitoring. Recommended.', recommended: true },
+            { id: 'hosted', icon: <Globe size={18} />, label: 'Hosted by Deeployment.AI', desc: 'We manage infrastructure, scaling, and monitoring. Recommended.', recommended: true },
             { id: 'download', icon: <Download size={18} />, label: 'Download model', desc: 'Download model artifacts for self-managed deployment.', recommended: false },
             { id: 'selfhost', icon: <Server size={18} />, label: 'Self-host', desc: 'Deploy using your own infrastructure or cloud.', recommended: false },
           ].map((opt) => (

@@ -152,9 +152,9 @@ async function predict(input: Record<string, any>): Promise<PredictionResponse> 
     overview: (
       <div className="space-y-5">
         <div>
-          <h2 className="text-[18px] font-bold text-foreground mb-2">AI Foundry API</h2>
+          <h2 className="text-[18px] font-bold text-foreground mb-2">Deeployment.AI API</h2>
           <p className="text-[13px] text-muted-foreground leading-relaxed">
-            The AI Foundry API lets you run inference on your trained models, manage projects, and retrieve analytics — all via HTTP. Every model you build in the console gets a dedicated REST endpoint.
+            The Deeployment.AI API lets you run inference on your trained models, manage projects, and retrieve analytics — all via HTTP. Every model you build in the console gets a dedicated REST endpoint.
           </p>
         </div>
         <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-2">

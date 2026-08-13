@@ -70,7 +70,7 @@ export function SettingsPage() {
             </div>
             <Button
               variant="outline" size="sm"
-              onClick={() => { localStorage.removeItem('aifoundry_projects_v2'); window.location.reload(); }}
+              onClick={() => { localStorage.removeItem('deeployment_projects_v2'); window.location.reload(); }}
               className="shrink-0 border-destructive/30 text-destructive hover:bg-destructive/10"
             >
               <RefreshCw size={12} />Reset

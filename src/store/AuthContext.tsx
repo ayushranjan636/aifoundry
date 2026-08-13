@@ -5,6 +5,7 @@ interface User {
   name: string;
   email: string;
   avatar: string;
+  isPremium?: boolean;
 }
 
 interface AuthContextType {
@@ -21,8 +22,9 @@ const AuthContext = createContext<AuthContextType | null>(null);
 const DEMO_USER: User = {
   id: 'demo-user',
   name: 'Ayush Ranjan',
-  email: 'ayush@aifoundry.ai',
+  email: 'ayush@deeployment.ai',
   avatar: 'AR',
+  isPremium: true,
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -30,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('aifoundry_user');
+    const stored = localStorage.getItem('deeployment_user');
     if (stored) {
       try {
         setUser(JSON.parse(stored));
@@ -48,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       avatar: email.slice(0, 2).toUpperCase(),
     };
     setUser(u);
-    localStorage.setItem('aifoundry_user', JSON.stringify(u));
+    localStorage.setItem('deeployment_user', JSON.stringify(u));
   };
 
   const signup = async (name: string, email: string, _password: string) => {
@@ -60,18 +62,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       avatar: name.slice(0, 2).toUpperCase(),
     };
     setUser(u);
-    localStorage.setItem('aifoundry_user', JSON.stringify(u));
+    localStorage.setItem('deeployment_user', JSON.stringify(u));
   };
 
   const demoLogin = async () => {
     await new Promise((r) => setTimeout(r, 800));
     setUser(DEMO_USER);
-    localStorage.setItem('aifoundry_user', JSON.stringify(DEMO_USER));
+    localStorage.setItem('deeployment_user', JSON.stringify(DEMO_USER));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('aifoundry_user');
+    localStorage.removeItem('deeployment_user');
   };
 
   return (

@@ -32,7 +32,7 @@ import { projectsApi, inferenceApi, isBackendUp, resetBackendCache } from './bac
 // ─────────────────────────────────────────────────────────────
 // Local persistence (fallback when backend is unavailable)
 // ─────────────────────────────────────────────────────────────
-const STORAGE_KEY = 'aifoundry_projects_v2';
+const STORAGE_KEY = 'deeployment_projects_v2';
 
 function loadProjects(): Project[] {
   try {

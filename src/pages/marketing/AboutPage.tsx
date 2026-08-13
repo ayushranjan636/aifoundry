@@ -10,7 +10,7 @@ const TEAM = [
     name: 'Ayush Ranjan',
     initials: 'AR',
     role: 'Co-Founder & CEO',
-    bio: 'Visionary behind AI Foundry. Ayush is obsessed with making AI accessible to builders who actually understand their domain — without requiring them to become ML engineers. He drives product strategy, partnerships, and the north star of making AI feel as natural as writing a sentence.',
+    bio: 'Visionary behind Deeployment.AI. Ayush is obsessed with making AI accessible to builders who actually understand their domain — without requiring them to become ML engineers. He drives product strategy, partnerships, and the north star of making AI feel as natural as writing a sentence.',
     color: 'bg-primary/15 text-primary',
     borderColor: 'border-primary/30',
   },
@@ -34,7 +34,7 @@ const TEAM = [
     name: 'Sreenidhi',
     initials: 'SR',
     role: 'Head of Design & UX',
-    bio: 'Sreenidhi is the reason AI Foundry feels approachable rather than intimidating. She designs every screen, interaction, and empty state with a single principle: the user should always know what to do next. Her work makes complex AI concepts feel obvious.',
+    bio: 'Sreenidhi is the reason Deeployment.AI feels approachable rather than intimidating. She designs every screen, interaction, and empty state with a single principle: the user should always know what to do next. Her work makes complex AI concepts feel obvious.',
     color: 'bg-pink-500/15 text-pink-600 dark:text-pink-400',
     borderColor: 'border-pink-300/30 dark:border-pink-800/30',
   },
@@ -88,7 +88,7 @@ export function AboutPage() {
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-sm">
               <Zap size={13} className="text-white" strokeWidth={2.5} />
             </div>
-            <span className="font-bold text-[14px] text-foreground tracking-tight">AI Foundry</span>
+            <span className="font-bold text-[14px] text-foreground tracking-tight">Deeployment.AI</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link to="/how-it-works" className="text-[13px] text-muted-foreground hover:text-foreground transition-colors hidden sm:block">How it works</Link>
@@ -109,7 +109,7 @@ export function AboutPage() {
             not just ML engineers.
           </h1>
           <p className="text-[17px] text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            We built AI Foundry because the most valuable AI isn't made from generic models — it's made from your data, your rules, and your deep understanding of your own problem. We remove every technical barrier between that knowledge and a production system.
+            We built Deeployment.AI because the most valuable AI isn't made from generic models — it's made from your data, your rules, and your deep understanding of your own problem. We remove every technical barrier between that knowledge and a production system.
           </p>
         </div>
 
