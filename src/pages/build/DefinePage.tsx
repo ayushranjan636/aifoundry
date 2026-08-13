@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowRight, FileText, Table2, ImageIcon, Mic, Video,
   AlignLeft, Tag, TrendingUp, List, Star, Braces, Layers,
-  Database, Camera, Film, AudioLines, Sparkles, Send,
-  CheckCircle2, Loader2,
+  Database, Camera, Film, AudioLines, Sparkles,
+  CheckCircle2, Loader2, MessageCircle, ChevronRight,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Textarea } from '../../components/ui/Input';
@@ -74,6 +74,11 @@ export function DefinePage() {
   const [questions, setQuestions] = useState<ClarifyingQuestion[]>([]);
   const [showQuestions, setShowQuestions] = useState(false);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
+  // Free-text answers per question
+  const [freeTextAnswers, setFreeTextAnswers] = useState<Record<string, string>>({});
+  // Track which objective we last generated questions for to avoid redundant calls
+  const lastQueriedObjective = useRef('');
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -87,9 +92,37 @@ export function DefinePage() {
       if (project.clarifyingQuestions?.length) {
         setQuestions(project.clarifyingQuestions);
         setShowQuestions(true);
+        lastQueriedObjective.current = project.objective ?? '';
       }
     }
   }, [id]);
+
+  // Auto-trigger clarifying questions after the user pauses typing (1.2s debounce)
+  useEffect(() => {
+    const trimmed = objective.trim();
+    if (trimmed.length < 30 || trimmed === lastQueriedObjective.current) return;
+
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(async () => {
+      if (trimmed === lastQueriedObjective.current) return;
+      lastQueriedObjective.current = trimmed;
+      setLoadingQuestions(true);
+      setShowQuestions(false);
+      try {
+        const profile = await parseRequirement(trimmed);
+        const qs = await generateClarifyingQuestions(trimmed, profile);
+        setQuestions(qs);
+        setShowQuestions(qs.length > 0);
+        setFreeTextAnswers({});
+      } finally {
+        setLoadingQuestions(false);
+      }
+    }, 1200);
+
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    };
+  }, [objective]);
 
   const toggle = <T extends string>(arr: T[], id: T): T[] =>
     arr.includes(id) ? arr.filter((i) => i !== id) : [...arr, id];
@@ -122,23 +155,21 @@ export function DefinePage() {
     setCleanedObjective('');
   };
 
-  const handleAskQuestions = async () => {
-    if (!objective.trim()) return;
-    setLoadingQuestions(true);
-    try {
-      const profile = await parseRequirement(objective);
-      const qs = await generateClarifyingQuestions(objective, profile);
-      setQuestions(qs);
-      setShowQuestions(true);
-    } finally {
-      setLoadingQuestions(false);
-    }
-  };
-
   const handleAnswerQuestion = (questionId: string, answer: string) => {
     setQuestions((prev) =>
       prev.map((q) => q.id === questionId ? { ...q, answer } : q)
     );
+    setFreeTextAnswers((prev) => ({ ...prev, [questionId]: '' }));
+  };
+
+  const handleFreeTextChange = (questionId: string, value: string) => {
+    setFreeTextAnswers((prev) => ({ ...prev, [questionId]: value }));
+  };
+
+  const handleFreeTextSubmit = (questionId: string) => {
+    const value = (freeTextAnswers[questionId] ?? '').trim();
+    if (!value) return;
+    handleAnswerQuestion(questionId, value);
   };
 
   const handleAnalyze = async () => {
@@ -194,14 +225,6 @@ export function DefinePage() {
               {isCleaningPrompt ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
               {isCleaningPrompt ? 'Improving...' : 'Improve with AI'}
             </button>
-            <button
-              onClick={handleAskQuestions}
-              disabled={loadingQuestions}
-              className="flex items-center gap-1.5 text-[12px] text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
-            >
-              {loadingQuestions ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
-              {loadingQuestions ? 'Analyzing...' : 'Get clarifying questions'}
-            </button>
           </div>
         )}
 
@@ -229,53 +252,116 @@ export function DefinePage() {
             </div>
           </div>
         )}
-      </div>
 
-      {/* Clarifying Questions (Claude-like) */}
-      {showQuestions && questions.length > 0 && (
-        <div className="rounded-xl border border-border bg-card p-5 space-y-4 animate-fade-in">
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center">
-              <Sparkles size={12} className="text-primary" />
-            </div>
-            <div className="text-[13px] font-semibold text-foreground">
-              A few questions to help us recommend better
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {questions.map((q) => (
-              <div key={q.id} className="space-y-2">
-                <div className="text-[12px] font-medium text-foreground">{q.question}</div>
-                {q.options && (
-                  <div className="flex flex-wrap gap-2">
-                    {q.options.map((opt) => (
-                      <button
-                        key={opt}
-                        onClick={() => handleAnswerQuestion(q.id, opt)}
-                        className={cn(
-                          'px-3 py-1.5 rounded-lg text-[11px] font-medium border transition-all',
-                          q.answer === opt
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground'
-                        )}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {q.answer && (
-                  <div className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400">
-                    <CheckCircle2 size={10} />
-                    {q.answer}
-                  </div>
-                )}
+        {/* Inline clarifying questions — auto-triggered after typing */}
+        {(loadingQuestions || (showQuestions && questions.length > 0)) && (
+          <div className="rounded-xl border border-border bg-card overflow-hidden animate-fade-in">
+            {/* Header */}
+            <div className="flex items-center gap-2.5 px-4 py-3 border-b border-border bg-muted/30">
+              <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                {loadingQuestions
+                  ? <Loader2 size={11} className="text-primary animate-spin" />
+                  : <MessageCircle size={11} className="text-primary" />
+                }
               </div>
-            ))}
+              <div className="text-[12px] font-semibold text-foreground">
+                {loadingQuestions ? 'Analyzing your prompt…' : 'A few things to clarify'}
+              </div>
+              {!loadingQuestions && (
+                <span className="ml-auto text-[10px] text-muted-foreground">
+                  {questions.filter(q => q.answer).length}/{questions.length} answered
+                </span>
+              )}
+            </div>
+
+            {/* Questions */}
+            {!loadingQuestions && (
+              <div className="divide-y divide-border">
+                {questions.map((q, idx) => (
+                  <div key={q.id} className="px-4 py-3.5 space-y-2.5">
+                    {/* Question */}
+                    <div className="flex items-start gap-2">
+                      <span className="mt-0.5 shrink-0 text-[10px] font-bold text-muted-foreground w-4">{idx + 1}.</span>
+                      <p className="text-[12.5px] font-medium text-foreground leading-snug">{q.question}</p>
+                    </div>
+
+                    {/* Option chips */}
+                    {q.options && q.options.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pl-6">
+                        {q.options.map((opt) => (
+                          <button
+                            key={opt}
+                            onClick={() => handleAnswerQuestion(q.id, opt)}
+                            className={cn(
+                              'px-2.5 py-1 rounded-full text-[11px] font-medium border transition-all duration-150',
+                              q.answer === opt
+                                ? 'border-primary bg-primary text-primary-foreground'
+                                : 'border-border bg-background text-muted-foreground hover:border-primary/50 hover:text-foreground'
+                            )}
+                          >
+                            {q.answer === opt && <CheckCircle2 size={9} className="inline mr-1 mb-0.5" />}
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Free-text fallback */}
+                    <div className="pl-6 flex items-center gap-2">
+                      {q.answer ? (
+                        <div className="flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400">
+                          <CheckCircle2 size={11} />
+                          <span className="font-medium">{q.answer}</span>
+                          <button
+                            onClick={() => handleAnswerQuestion(q.id, '')}
+                            className="ml-1 text-muted-foreground hover:text-foreground text-[10px] underline"
+                          >
+                            change
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5 w-full max-w-xs">
+                          <input
+                            type="text"
+                            value={freeTextAnswers[q.id] ?? ''}
+                            onChange={(e) => handleFreeTextChange(q.id, e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') handleFreeTextSubmit(q.id); }}
+                            placeholder="Or type your own answer…"
+                            className="flex-1 bg-background border border-border rounded-lg px-2.5 py-1 text-[11px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors"
+                          />
+                          <button
+                            onClick={() => handleFreeTextSubmit(q.id)}
+                            disabled={!(freeTextAnswers[q.id] ?? '').trim()}
+                            className="p-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-30"
+                          >
+                            <ChevronRight size={11} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Loading skeleton rows */}
+            {loadingQuestions && (
+              <div className="divide-y divide-border">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="px-4 py-3.5 space-y-2 animate-pulse">
+                    <div className="h-3 bg-muted rounded w-3/4" />
+                    <div className="flex gap-1.5 pl-6">
+                      <div className="h-6 w-16 bg-muted rounded-full" />
+                      <div className="h-6 w-20 bg-muted rounded-full" />
+                      <div className="h-6 w-14 bg-muted rounded-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Training Data Types */}
       <div className="space-y-3">
