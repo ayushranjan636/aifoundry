@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, ArrowUpRight, Globe } from 'lucide-react';
+import { ArrowUpRight, Globe } from 'lucide-react';
 
 const FOOTER_LINKS = {
   Product: [
@@ -32,10 +32,7 @@ export function LandingFooter() {
           {/* Brand */}
           <div className="col-span-2 space-y-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
-                <Zap size={14} className="text-white" strokeWidth={2.5} />
-              </div>
-              <span className="font-bold text-[15px] text-foreground">Deeployment.AI</span>
+              <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-7 w-auto rounded" />
             </div>
             <p className="text-[13px] text-muted-foreground leading-relaxed max-w-xs">
               Build AI for your problem. Not someone else's. From proprietary data to production AI — without an ML team.

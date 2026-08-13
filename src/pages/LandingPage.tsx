@@ -58,10 +58,7 @@ function ConsoleMockup() {
         {/* Sidebar */}
         <div className="w-32 border-r border-border bg-muted/20 p-2 space-y-1">
           <div className="flex items-center gap-1.5 px-2 py-1.5 mb-2">
-            <div className="h-5 w-5 rounded-md bg-primary flex items-center justify-center">
-              <Zap size={9} className="text-white" />
-            </div>
-            <span className="text-[9px] font-bold text-foreground">Deeployment.AI</span>
+            <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-4 w-auto rounded" />
           </div>
           {['Overview', 'Projects', 'Models', 'Deployments'].map((item, i) => (
             <div key={item} className={cn(
@@ -133,10 +130,7 @@ export function LandingPage() {
       <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-5xl px-4">
         <div className="rounded-2xl border border-white/10 dark:border-white/8 bg-white/70 dark:bg-[hsl(222,20%,7%)]/75 backdrop-blur-xl shadow-lg shadow-black/5 px-5 h-[52px] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-sm">
-              <Zap size={13} className="text-white" strokeWidth={2.5} />
-            </div>
-            <span className="font-bold text-[14px] text-foreground tracking-tight">Deeployment.AI</span>
+            <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-6 w-auto rounded" />
           </div>
           <nav className="hidden md:flex items-center gap-5 text-[13px] text-muted-foreground">
             <a href="#how-it-works" className="hover:text-foreground transition-colors">How it works</a>
@@ -327,8 +321,8 @@ export function LandingPage() {
                 {/* Glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent pointer-events-none rounded-2xl" />
                 <div className="relative">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary shadow-md shadow-primary/30 mx-auto mb-3">
-                    <Zap size={22} className="text-white" strokeWidth={2.5} />
+                  <div className="mx-auto mb-3 w-fit">
+                    <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-10 w-auto rounded-xl shadow-md shadow-primary/30" />
                   </div>
                   <div className="text-[18px] font-bold text-foreground">Deeployment.AI</div>
                   <div className="text-[11px] text-muted-foreground mt-1">Architecture · Training · Evaluation</div>

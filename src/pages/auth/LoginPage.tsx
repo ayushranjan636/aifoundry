@@ -45,10 +45,7 @@ export function LoginPage() {
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-muted/30 border-r border-border flex-col p-10 justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-            <Zap size={14} className="text-primary-foreground" />
-          </div>
-          <span className="font-semibold text-sm">Deeployment.AI</span>
+          <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-6 w-auto rounded" />
         </Link>
 
         <div className="space-y-8">
@@ -97,10 +94,7 @@ export function LoginPage() {
         <div className="w-full max-w-sm space-y-6 animate-fade-in">
           <div className="lg:hidden flex items-center gap-2 mb-6">
             <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-                <Zap size={14} className="text-primary-foreground" />
-              </div>
-              <span className="font-semibold text-sm">Deeployment.AI</span>
+              <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-6 w-auto rounded" />
             </Link>
           </div>
 

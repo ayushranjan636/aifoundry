@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { LandingFooter } from '../../components/layout/LandingFooter';
 import { cn } from '../../lib/utils';
@@ -85,10 +85,7 @@ export function AboutPage() {
       <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-5xl px-4">
         <div className="rounded-2xl border border-white/10 dark:border-white/8 bg-white/70 dark:bg-[hsl(222,20%,7%)]/75 backdrop-blur-xl shadow-lg shadow-black/5 px-5 h-[52px] flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-sm">
-              <Zap size={13} className="text-white" strokeWidth={2.5} />
-            </div>
-            <span className="font-bold text-[14px] text-foreground tracking-tight">Deeployment.AI</span>
+            <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-6 w-auto rounded" />
           </Link>
           <div className="flex items-center gap-3">
             <Link to="/how-it-works" className="text-[13px] text-muted-foreground hover:text-foreground transition-colors hidden sm:block">How it works</Link>

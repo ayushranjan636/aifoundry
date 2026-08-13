@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, FolderOpen, Cpu, Rocket,
   BarChart3, Settings, ChevronDown, LogOut,
-  Moon, Sun, Menu, X, Zap, BookOpen, DollarSign,
+  Moon, Sun, Menu, X, BookOpen, DollarSign,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../store/AuthContext';
@@ -68,10 +68,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       >
         {/* Logo */}
         <div className="h-[52px] flex items-center px-4 border-b border-border gap-2.5 shrink-0">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-sm">
-            <Zap size={13} className="text-white" strokeWidth={2.5} />
-          </div>
-          <span className="font-semibold text-[13px] text-foreground tracking-tight">Deeployment.AI</span>
+          <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-6 w-auto rounded" />
           <button
             className="ml-auto md:hidden text-muted-foreground hover:text-foreground p-1"
             onClick={() => setSidebarOpen(false)}
@@ -192,10 +189,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <Menu size={18} />
           </button>
           <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary">
-              <Zap size={11} className="text-white" />
-            </div>
-            <span className="font-semibold text-[13px]">Deeployment.AI</span>
+            <img src="/Deployment-ai.jpeg" alt="Deeployment.AI" className="h-5 w-auto rounded" />
           </div>
           <button onClick={toggleDark} className="ml-auto text-muted-foreground hover:text-foreground">
             {dark ? <Sun size={16} /> : <Moon size={16} />}
